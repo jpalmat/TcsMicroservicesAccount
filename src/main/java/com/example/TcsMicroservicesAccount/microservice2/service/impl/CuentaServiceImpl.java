@@ -10,10 +10,12 @@ import org.springframework.web.reactive.function.client.WebClient;
 import com.example.TcsMicroservicesAccount.microservice2.data.Cuenta;
 import com.example.TcsMicroservicesAccount.microservice2.data.CuentaRepository;
 import com.example.TcsMicroservicesAccount.microservice2.dto.ClienteDTO;
+import com.example.TcsMicroservicesAccount.microservice2.dto.CuentaDTO;
 import com.example.TcsMicroservicesAccount.microservice2.dto.ReportDTO;
 import com.example.TcsMicroservicesAccount.microservice2.exceptions.NoAccountException;
 import com.example.TcsMicroservicesAccount.microservice2.exceptions.NoClienteException;
 import com.example.TcsMicroservicesAccount.microservice2.service.CuentaService;
+import com.example.TcsMicroservicesAccount.microservice2.util.CuentaMapperUtil;
 
 @Service
 public class CuentaServiceImpl implements CuentaService {
@@ -26,51 +28,39 @@ public class CuentaServiceImpl implements CuentaService {
 
     int count = 0;
     @Override
-    public List<Cuenta> getAllCuentas() {
-        return cuentaRepository.findAll();
+    public List<CuentaDTO> getAllCuentas() {
+        return cuentaRepository.findAll().stream()
+        .map(cuenta -> CuentaMapperUtil.toDTO(cuenta))
+        .toList();
     }
 
     @Override
-    public void addCuenta(Cuenta cuenta) {
-        cuentaRepository.save(cuenta);
+    public void addCuenta(CuentaDTO cuenta) {
+        cuentaRepository.save(CuentaMapperUtil.toEntity(cuenta));
     }
 
     @Override
-    public boolean deleteCuenta(Long id) {
+    public void deleteCuenta(Long id) {
+        Optional<Cuenta> cuentaOptional = cuentaRepository.findById(id);
+        if(cuentaOptional.isEmpty()) {
+            throw new NoAccountException("Account with id " + id + " not found");
+        }
         try {
-        cuentaRepository.deleteById(id);
-        return true;
+            cuentaRepository.deleteById(id);
         } catch (Exception e) {
-            return false;
+            throw new NoAccountException("Unable to delete Account with id " + id);
         }
     }
 
     @Override
-    public boolean updateCuenta(Long id, Cuenta cuenta_updated) {
+    public void updateCuenta(Long id, CuentaDTO cuenta_updated) {
 
-        Optional<Cuenta> companiesOptional = cuentaRepository.findById(id);
-        if(companiesOptional.isPresent()) {
-            Cuenta cuenta = companiesOptional.get();
-            // personas.setName(persona_updated.getName());
-
-            cuentaRepository.save(cuenta);
-            return true;
+        Optional<Cuenta> cuentaOptional = cuentaRepository.findById(id);
+        if(cuentaOptional.isEmpty()) {
+            throw new NoAccountException("Account with id " + id + " not found");
         }
-        return false;
+        cuentaRepository.save(CuentaMapperUtil.toEntity(cuenta_updated));
     }
-
-    // @Override
-    // public Cuenta getCuentaById(Long numeroCuenta) {
-    //     return cuentaRepository.findByAccountNumber(numeroCuenta);
-    // }
-
-    // @Override
-    // public List<Cuenta> getCuentasByClientId(Long clientId) {
-
-    //     return cuentaRepository.findAll().stream()
-    //             .filter(cuenta -> cuenta.getClientId().equals(clientId))
-    //             .toList();
-    // }
     
     @Override
     public ReportDTO getAllByAccountClientIdAndDateBetween(Long clientId, Date dateTransactionStart, Date dateTransactionEnd) {

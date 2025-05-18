@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.TcsMicroservicesAccount.microservice2.data.Cuenta;
+import com.example.TcsMicroservicesAccount.microservice2.dto.CuentaDTO;
 import com.example.TcsMicroservicesAccount.microservice2.dto.ReportDTO;
 import com.example.TcsMicroservicesAccount.microservice2.service.CuentaService;
 
@@ -31,31 +31,25 @@ public class CuentasController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Cuenta>> getCuenta() {
+    public ResponseEntity<List<CuentaDTO>> getCuenta() {
         return new ResponseEntity<>(this.cuentaService.getAllCuentas(), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<String> addCuenta(@RequestBody Cuenta cuenta) {
+    public ResponseEntity<String> addCuenta(@RequestBody CuentaDTO cuenta) {
         this.cuentaService.addCuenta(cuenta);
         return new ResponseEntity<>("Cuenta added successfully", HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCuenta(@PathVariable Long id) {
-        boolean deleted = this.cuentaService.deleteCuenta(id);
-        if (!deleted) {
-            return new ResponseEntity<>("Cuenta not found", HttpStatus.NOT_FOUND);
-        }
+        this.cuentaService.deleteCuenta(id);
         return new ResponseEntity<>("Cuenta deleted successfully", HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateCuenta(@PathVariable Long id, @RequestBody Cuenta cuentaUpdated) {
-        boolean updated = this.cuentaService.updateCuenta(id, cuentaUpdated);
-        if (!updated) {
-            return new ResponseEntity<>("Cuenta not found", HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<String> updateCuenta(@PathVariable Long id, @RequestBody CuentaDTO cuentaUpdated) {
+        this.cuentaService.updateCuenta(id, cuentaUpdated);
         return new ResponseEntity<>("Cuenta updated successfully", HttpStatus.OK);
     }
 
