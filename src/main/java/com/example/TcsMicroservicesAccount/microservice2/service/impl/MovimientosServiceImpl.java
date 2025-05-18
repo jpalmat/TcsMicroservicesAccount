@@ -1,23 +1,17 @@
 package com.example.TcsMicroservicesAccount.microservice2.service.impl;
 
-import java.util.Date;
+
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import com.example.TcsMicroservicesAccount.microservice2.data.Cuenta;
 import com.example.TcsMicroservicesAccount.microservice2.data.CuentaRepository;
 import com.example.TcsMicroservicesAccount.microservice2.data.Movimientos;
 import com.example.TcsMicroservicesAccount.microservice2.data.MovimientosRepository;
-import com.example.TcsMicroservicesAccount.microservice2.dto.ClienteDTO;
-import com.example.TcsMicroservicesAccount.microservice2.dto.ReportDTO;
 import com.example.TcsMicroservicesAccount.microservice2.exceptions.NoAccountException;
 import com.example.TcsMicroservicesAccount.microservice2.exceptions.NoBalanceException;
-import com.example.TcsMicroservicesAccount.microservice2.exceptions.NoClienteException;
 import com.example.TcsMicroservicesAccount.microservice2.service.MovimientosService;
 
 @Service
