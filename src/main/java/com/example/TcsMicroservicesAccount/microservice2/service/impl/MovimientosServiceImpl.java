@@ -38,7 +38,7 @@ public class MovimientosServiceImpl implements MovimientosService {
             double nuevoSaldo = balanceActual + movimientos.getAmount();
 
             if(nuevoSaldo < 0) {
-                throw new NoBalanceException("Insufficient funds");
+                throw new NoBalanceException("Insufficient funds in account " + accountNumber);
             }
             
             cuenta.setBalance(nuevoSaldo);

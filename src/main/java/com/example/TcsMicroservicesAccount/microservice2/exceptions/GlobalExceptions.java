@@ -13,5 +13,10 @@ public class GlobalExceptions {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(NoBalanceException.class)
+    public ResponseEntity<String> handleNoBalanceException(NoBalanceException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
     
 }
