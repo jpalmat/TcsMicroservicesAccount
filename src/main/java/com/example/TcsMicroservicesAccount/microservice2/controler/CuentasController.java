@@ -1,7 +1,9 @@
 package com.example.TcsMicroservicesAccount.microservice2.controler;
 
+import java.util.Date;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,9 +13,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.TcsMicroservicesAccount.microservice2.data.Cuenta;
+import com.example.TcsMicroservicesAccount.microservice2.dto.ReportDTO;
 import com.example.TcsMicroservicesAccount.microservice2.service.CuentaService;
 
 @RestController
@@ -54,4 +58,11 @@ public class CuentasController {
         }
         return new ResponseEntity<>("Cuenta updated successfully", HttpStatus.OK);
     }
+
+    @GetMapping("/cliente/{clientId}/report")
+    public ResponseEntity<ReportDTO> report(@PathVariable Long clientId, 
+    @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateTransactionStart, 
+    @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateTransactionEnd) {
+        return ResponseEntity.ok().body(cuentaService.getAllByAccountClientIdAndDateBetween(clientId, dateTransactionStart, dateTransactionEnd));
+	}
 }
