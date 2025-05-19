@@ -15,6 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.TcsMicroservicesAccount.microservice2.dto.MovimientosDTO;
 import com.example.TcsMicroservicesAccount.microservice2.service.MovimientosService;
 
+/**
+ * F1: Generación de CRUDS (Crear, editar, actualizar y eliminar registros - Entidades: Cliente,
+Cuenta y Movimiento).
+Los nombres de los endpoints a generar son: /movimientos
+ */
 @RestController
 @RequestMapping("/movimientos")
 public class MovimientosController {

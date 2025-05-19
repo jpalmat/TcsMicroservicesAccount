@@ -20,6 +20,11 @@ import com.example.TcsMicroservicesAccount.microservice2.dto.CuentaDTO;
 import com.example.TcsMicroservicesAccount.microservice2.dto.ReportDTO;
 import com.example.TcsMicroservicesAccount.microservice2.service.CuentaService;
 
+/**
+ * F1: Generación de CRUDS (Crear, editar, actualizar y eliminar registros - Entidades: Cliente,
+Cuenta y Movimiento).
+Los nombres de los endpoints a generar son: /cuentas
+ */
 @RestController
 @RequestMapping("/cuentas")
 public class CuentasController {

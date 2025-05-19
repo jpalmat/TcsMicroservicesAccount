@@ -36,6 +36,13 @@ public class MovimientosServiceImpl implements MovimientosService {
         .toList();
     }
 
+    /**
+     F2: Registro de movimientos: al registrar un movimiento en la cuenta se debe tener en cuenta
+    lo siguiente:
+        • Para un movimiento se pueden tener valores positivos o negativos.
+        • Al realizar un movimiento se debe actualizar el saldo disponible.
+        • Se debe llevar el registro de las transacciones realizadas
+     */
     @Override
     public void addMovimiento(Long accountNumber, MovimientosDTO movimientosDTO) {
         Optional<Cuenta> cuentaOptional = cuentaRepository.findById(accountNumber);
@@ -49,6 +56,11 @@ public class MovimientosServiceImpl implements MovimientosService {
 
         double newBalance = currentBalance + movimientosDTO.getMonto();
 
+        /**
+         F3: Registro de movimientos: Al realizar un movimiento el cual no cuente con saldo, debe
+        alertar mediante el siguiente mensaje “Saldo no disponible”
+            • Defina, según su expertise, la mejor manera de capturar y mostrar el error.
+         */
         if(newBalance < 0) {
             throw new NoBalanceException("Insufficient funds in account " + accountNumber);
         }

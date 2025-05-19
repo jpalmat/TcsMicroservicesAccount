@@ -64,6 +64,12 @@ public class CuentaServiceImpl implements CuentaService {
         cuentaRepository.save(CuentaMapperUtil.toEntity(cuenta_updated));
     }
     
+    /**
+     F4: Reportes: Generar un reporte de “Estado de cuenta” especificando un rango de fechas y
+    cliente. Este reporte debe contener:
+        o Cuentas asociadas con sus respectivos saldos
+        o Detalle de movimientos de las cuentas
+     */
     @Override
     public ReportDTO getAllByAccountClientIdAndDateBetween(Long clientId, LocalDate dateTransactionStart, LocalDate dateTransactionEnd) {
 
