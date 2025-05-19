@@ -1,9 +1,8 @@
 package com.example.TcsMicroservicesAccount.microservice2.service.impl;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -18,6 +17,7 @@ import com.example.TcsMicroservicesAccount.microservice2.exceptions.NoAccountExc
 import com.example.TcsMicroservicesAccount.microservice2.exceptions.NoClienteException;
 import com.example.TcsMicroservicesAccount.microservice2.service.CuentaService;
 import com.example.TcsMicroservicesAccount.microservice2.util.CuentaMapperUtil;
+import com.example.TcsMicroservicesAccount.microservice2.util.MovimientoMapperUtil;
 
 @Service
 public class CuentaServiceImpl implements CuentaService {
@@ -65,8 +65,8 @@ public class CuentaServiceImpl implements CuentaService {
     }
     
     @Override
-    public ReportDTO getAllByAccountClientIdAndDateBetween(Long clientId, Date dateTransactionStart, Date dateTransactionEnd) {
-// Report
+    public ReportDTO getAllByAccountClientIdAndDateBetween(Long clientId, LocalDate dateTransactionStart, LocalDate dateTransactionEnd) {
+
         WebClient webClient = WebClient.create("http://localhost:8080/clientes");
         ClienteDTO client = webClient.get()
         .uri("/"+clientId)
@@ -80,20 +80,18 @@ public class CuentaServiceImpl implements CuentaService {
         List<Cuenta> cuentasUsuario = cuentaRepository.findAll().stream()
         .filter(cuenta -> cuenta.getClientId().equals(clientId)).collect(Collectors.toList());
 
-        // List<Cuenta> cuentasDeClientes = cuentasUsuario1.stream().filter(cuenta -> cuenta.getMovimientos().stream()
-        // .anyMatch(movimiento -> movimiento.getDate().after(dateTransactionStart) && movimiento.getDate().before(dateTransactionEnd)))
-// .toList();
+        List<CuentaDTO> reporteUsuario = cuentasUsuario.stream().map(cuenta -> {
 
-        List<Cuenta> reporteUsuario = cuentasUsuario.stream()
-            .filter(cuenta -> cuenta.getMovimientos().stream()
-                    .anyMatch(movimiento -> movimiento.getDate().after(dateTransactionStart) && movimiento.getDate().before(dateTransactionEnd)))
-            .collect(Collectors.toList());
+            CuentaDTO cuentaDTO = CuentaMapperUtil.toDTO(cuenta);
+            cuentaDTO.setMovimientos(
+            cuenta.getMovimientos().stream()
+                .filter(movimiento -> movimiento.getDate().isAfter(dateTransactionStart) && movimiento.getDate().isBefore(dateTransactionEnd))
+                .map(MovimientoMapperUtil::toDTO)
+                .collect(Collectors.toList())
+            );
 
-        // List<Cuenta> cuentasDeClientes = cuentaRepository.findAll().stream()
-        //         .filter(cuenta -> cuenta.getClientId().equals(clientId))
-        //         .filter(cuenta -> cuenta.getMovimientos().stream()
-        //                 .anyMatch(movimiento -> movimiento.getDate().after(dateTransactionStart) && movimiento.getDate().before(dateTransactionEnd)))
-        //         .toList();
+            return cuentaDTO;
+        }).collect(Collectors.toList());
 
         if (reporteUsuario.isEmpty()) {
             throw new NoAccountException("Client with id " + clientId + " has no accounts");

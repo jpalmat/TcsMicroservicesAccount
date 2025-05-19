@@ -1,9 +1,9 @@
 package com.example.TcsMicroservicesAccount.microservice2.dto;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class MovimientosDTO {
-    private Date fechaMovimiento;
+    private LocalDate fechaMovimiento;
     private String tipoMovimiento;
     private double monto;
     private double saldo;
@@ -11,11 +11,11 @@ public class MovimientosDTO {
     public MovimientosDTO() {
     }
 
-    public Date getFechaMovimiento() {
+    public LocalDate getFechaMovimiento() {
         return fechaMovimiento;
     }
 
-    public void setFechaMovimiento(Date fechaMovimiento) {
+    public void setFechaMovimiento(LocalDate fechaMovimiento) {
         this.fechaMovimiento = fechaMovimiento;
     }
 

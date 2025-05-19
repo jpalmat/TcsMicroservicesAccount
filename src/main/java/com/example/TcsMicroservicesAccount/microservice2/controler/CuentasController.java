@@ -1,6 +1,6 @@
 package com.example.TcsMicroservicesAccount.microservice2.controler;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -55,8 +55,8 @@ public class CuentasController {
 
     @GetMapping("/cliente/{clientId}/report")
     public ResponseEntity<ReportDTO> report(@PathVariable Long clientId, 
-    @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateTransactionStart, 
-    @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateTransactionEnd) {
+    @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dateTransactionStart, 
+    @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dateTransactionEnd) {
         return ResponseEntity.ok().body(cuentaService.getAllByAccountClientIdAndDateBetween(clientId, dateTransactionStart, dateTransactionEnd));
 	}
 }

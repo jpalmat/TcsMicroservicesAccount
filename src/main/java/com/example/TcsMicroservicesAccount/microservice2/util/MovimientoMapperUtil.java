@@ -1,6 +1,6 @@
 package com.example.TcsMicroservicesAccount.microservice2.util;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import com.example.TcsMicroservicesAccount.microservice2.data.Movimientos;
 import com.example.TcsMicroservicesAccount.microservice2.dto.MovimientosDTO;
@@ -18,7 +18,7 @@ public class MovimientoMapperUtil {
 
     public static Movimientos toEntity(MovimientosDTO movimientosDTO) {
         Movimientos movimientos = new Movimientos();
-        movimientos.setDate(new Date());
+        movimientos.setDate(LocalDate.now());
         movimientos.setMovementType(movimientosDTO.getTipoMovimiento());
         movimientos.setAmount(movimientosDTO.getMonto());
         return movimientos;

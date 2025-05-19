@@ -1,6 +1,6 @@
 package com.example.TcsMicroservicesAccount.microservice2.data;
 
-import java.util.Date;
+import java.time.LocalDate;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,7 +12,7 @@ public class Movimientos {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Date date;
+    private LocalDate date;
     private String movementType;
     private double amount;
     private double balance;
@@ -28,11 +28,11 @@ public class Movimientos {
         this.id = id;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
@@ -58,5 +58,16 @@ public class Movimientos {
 
     public void setBalance(double balance) {
         this.balance = balance;
+    }
+
+    @Override
+    public String toString() {
+        return "Movimientos{" +
+                "id=" + id +
+                ", date=" + date +
+                ", movementType='" + movementType + '\'' +
+                ", amount=" + amount +
+                ", balance=" + balance +
+                '}';
     }
 }

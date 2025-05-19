@@ -2,13 +2,11 @@ package com.example.TcsMicroservicesAccount.microservice2.dto;
 
 import java.util.List;
 
-import com.example.TcsMicroservicesAccount.microservice2.data.Cuenta;
-
 public class ReportDTO {
     private String clienteNombre;
-    private List<Cuenta> cuentasDeCliente;
+    private List<CuentaDTO> cuentasDeCliente;
 
-    public ReportDTO(String clienteNombre, List<Cuenta> cuentasDeCliente) {
+    public ReportDTO(String clienteNombre, List<CuentaDTO> cuentasDeCliente) {
         this.clienteNombre = clienteNombre;
         this.cuentasDeCliente = cuentasDeCliente;
     }
@@ -21,11 +19,11 @@ public class ReportDTO {
         this.clienteNombre = clienteNombre;
     }
 
-    public List<Cuenta> getCuentasCliente() {
+    public List<CuentaDTO> getCuentasCliente() {
         return cuentasDeCliente;
     }
 
-    public void setCuentasCliente(List<Cuenta> cuentasDeCliente) {
+    public void setCuentasCliente(List<CuentaDTO> cuentasDeCliente) {
         this.cuentasDeCliente = cuentasDeCliente;
     }
 }
