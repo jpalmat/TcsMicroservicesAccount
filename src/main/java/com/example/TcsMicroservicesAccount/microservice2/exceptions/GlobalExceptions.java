@@ -18,5 +18,15 @@ public class GlobalExceptions {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(NoMovementException.class)
+    public ResponseEntity<String> handleNoBalanceException(NoMovementException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NoClienteException.class)
+    public ResponseEntity<String> handleNoClienteException(NoClienteException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
     
 }

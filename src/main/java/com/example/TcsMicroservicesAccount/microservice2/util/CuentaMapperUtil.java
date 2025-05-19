@@ -12,6 +12,7 @@ public class CuentaMapperUtil {
         cuentaDTO.setSaldo(cuenta.getBalance());
         cuentaDTO.setEstado(cuenta.getState());
         cuentaDTO.setClientId(cuenta.getClientId());
+        cuentaDTO.setMovimientos(cuenta.getMovimientos().stream().map(movimiento -> MovimientoMapperUtil.toDTO(movimiento)).toList());
         return cuentaDTO;
     }
 

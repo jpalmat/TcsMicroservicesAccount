@@ -10,9 +10,12 @@ import com.example.TcsMicroservicesAccount.microservice2.data.Cuenta;
 import com.example.TcsMicroservicesAccount.microservice2.data.CuentaRepository;
 import com.example.TcsMicroservicesAccount.microservice2.data.Movimientos;
 import com.example.TcsMicroservicesAccount.microservice2.data.MovimientosRepository;
+import com.example.TcsMicroservicesAccount.microservice2.dto.MovimientosDTO;
 import com.example.TcsMicroservicesAccount.microservice2.exceptions.NoAccountException;
 import com.example.TcsMicroservicesAccount.microservice2.exceptions.NoBalanceException;
+import com.example.TcsMicroservicesAccount.microservice2.exceptions.NoMovementException;
 import com.example.TcsMicroservicesAccount.microservice2.service.MovimientosService;
+import com.example.TcsMicroservicesAccount.microservice2.util.MovimientoMapperUtil;
 
 @Service
 public class MovimientosServiceImpl implements MovimientosService {
@@ -27,52 +30,69 @@ public class MovimientosServiceImpl implements MovimientosService {
 
     int count = 0;
     @Override
-    public List<Movimientos> getAllMovimientos() {
-        return movimientosRepository.findAll();
+    public List<MovimientosDTO> getAllMovimientos() {
+        return movimientosRepository.findAll().stream()
+        .map(movimiento -> MovimientoMapperUtil.toDTO(movimiento))
+        .toList();
     }
 
     @Override
-    public void addMovimiento(Long accountNumber, Movimientos movimientos) {
-        Cuenta cuenta = cuentaRepository.findById(accountNumber).orElse(null);
-        if (cuenta != null) {
-            double balanceActual = cuenta.getBalance();
-            double nuevoSaldo = balanceActual + movimientos.getAmount();
+    public void addMovimiento(Long accountNumber, MovimientosDTO movimientosDTO) {
+        Optional<Cuenta> cuentaOptional = cuentaRepository.findById(accountNumber);
 
-            if(nuevoSaldo < 0) {
-                throw new NoBalanceException("Insufficient funds in account " + accountNumber);
-            }
-            
-            cuenta.setBalance(nuevoSaldo);
-            movimientosRepository.save(movimientos);
-            cuenta.getMovimientos().add(movimientos);
-            cuentaRepository.save(cuenta);
+        if(cuentaOptional.isEmpty()) {
+            throw new NoAccountException("Account " + accountNumber +" not found");
+        }
+
+        Cuenta cuenta = cuentaOptional.get();
+        double currentBalance = getCurrentBalance(cuenta);
+
+        double newBalance = currentBalance + movimientosDTO.getMonto();
+
+        if(newBalance < 0) {
+            throw new NoBalanceException("Insufficient funds in account " + accountNumber);
+        }
+
+        Movimientos movimiento = MovimientoMapperUtil.toEntity(movimientosDTO);
+        movimiento.setBalance(newBalance);
+        
+        movimientosRepository.save(movimiento);
+        cuenta.getMovimientos().add(movimiento);
+        cuentaRepository.save(cuenta);
+    }
+
+    private double getCurrentBalance(Cuenta cuenta) {
+        if(cuenta.getMovimientos().size() == 0) {
+            return cuenta.getBalance();
         } else {
-            throw new NoAccountException("Account " + accountNumber +"not found");
+            return cuenta.getMovimientos().get(cuenta.getMovimientos().size() - 1).getBalance();
         }
     }
 
     @Override
-    public boolean deleteMovimiento(Long id) {
+    public void deleteMovimiento(Long id) {
+        Optional<Movimientos> movimientoOptional = movimientosRepository.findById(id);
+        if(movimientoOptional.isEmpty()) {
+            throw new NoMovementException("Movimiento with id " + id +" not found");
+        }
         try {
-        movimientosRepository.deleteById(id);
-        return true;
+            movimientosRepository.deleteById(id);
         } catch (Exception e) {
-            return false;
+            throw new NoMovementException("Unable to delete Movimiento with id " + id);
         }
     }
 
     @Override
-    public boolean updateMovimiento(Long id, Movimientos movimientos_updated) {
+    public void updateMovimiento(Long id, MovimientosDTO movimientos_updated) {
 
-        Optional<Movimientos> companiesOptional = movimientosRepository.findById(id);
-        if(companiesOptional.isPresent()) {
-            Movimientos movimientos = companiesOptional.get();
-            // personas.setName(persona_updated.getName());
+        Optional<Movimientos> movimientoOptional = movimientosRepository.findById(id);
 
-            movimientosRepository.save(movimientos);
-            return true;
+        if(movimientoOptional.isEmpty()) {
+            throw new NoMovementException("Movimiento with id " + id +" not found");
         }
-        return false;
+
+        movimientosRepository.save(MovimientoMapperUtil.toEntity(movimientos_updated));
+
     }
 
 }

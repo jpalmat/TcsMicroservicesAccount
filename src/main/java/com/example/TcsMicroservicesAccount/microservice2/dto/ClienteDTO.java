@@ -1,49 +1,49 @@
 package com.example.TcsMicroservicesAccount.microservice2.dto;
 
 public class ClienteDTO {
-    private Long id;
-    private String name;
-    private String gender;
-    private Integer age;
+    private Long cedula;
+    private String nombre;
+    private String genero;
+    private Integer edad;
     private String direction;
-    private String phone;
+    private String telefono;
     private String email;
-    private String password;
-    private String state;
+    private String contrasenia;
+    private String estadoCliente;
 
     public ClienteDTO() {
     }
 
-    public Long getId() {
-        return id;
+    public Long getCedula() {
+        return cedula;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCedula(Long cedula) {
+        this.cedula = cedula;
     }
 
-    public String getName() {
-        return name;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
-    public String getGender() {
-        return gender;
+    public String getGenero() {
+        return genero;
     }
 
-    public void setGender(String gender) {
-        this.gender = gender;
+    public void setGenero(String genero) {
+        this.genero = genero;
     }
 
-    public Integer getAge() {
-        return age;
+    public Integer getEdad() {
+        return edad;
     }
 
-    public void setAge(Integer age) {
-        this.age = age;
+    public void setEdad(Integer edad) {
+        this.edad = edad;
     }
 
     public String getDirection() {
@@ -54,12 +54,12 @@ public class ClienteDTO {
         this.direction = direction;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getTelefono() {
+        return telefono;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
     }
 
     public String getEmail() {
@@ -70,19 +70,19 @@ public class ClienteDTO {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getContrasenia() {
+        return contrasenia;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setContrasenia(String contrasenia) {
+        this.contrasenia = contrasenia;
     }
 
-    public String getState() {
-        return state;
+    public String getEstadoCliente() {
+        return estadoCliente;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setEstadoCliente(String estadoCliente) {
+        this.estadoCliente = estadoCliente;
     }
 }

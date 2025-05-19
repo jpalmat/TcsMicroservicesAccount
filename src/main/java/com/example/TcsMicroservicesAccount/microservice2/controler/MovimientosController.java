@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.example.TcsMicroservicesAccount.microservice2.data.Movimientos;
+import com.example.TcsMicroservicesAccount.microservice2.dto.MovimientosDTO;
 import com.example.TcsMicroservicesAccount.microservice2.service.MovimientosService;
 
 @RestController
@@ -26,31 +26,25 @@ public class MovimientosController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Movimientos>> getMovimientos() {
+    public ResponseEntity<List<MovimientosDTO>> getMovimientos() {
         return new ResponseEntity<>(this.movimientosService.getAllMovimientos(), HttpStatus.OK);
     }
 
     @PostMapping("/{accountNumber}")
-    public ResponseEntity<String> addMovimiento(@PathVariable Long accountNumber, @RequestBody Movimientos movimientos) {
+    public ResponseEntity<String> addMovimiento(@PathVariable Long accountNumber, @RequestBody MovimientosDTO movimientos) {
         this.movimientosService.addMovimiento(accountNumber, movimientos);
         return new ResponseEntity<>("Movimiento added successfully", HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteMovimiento(@PathVariable Long id) {
-        boolean deleted = this.movimientosService.deleteMovimiento(id);
-        if (!deleted) {
-            return new ResponseEntity<>("Movimiento not found", HttpStatus.NOT_FOUND);
-        }
+        this.movimientosService.deleteMovimiento(id);
         return new ResponseEntity<>("Movimiento deleted successfully", HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateMovimiento(@PathVariable Long id, @RequestBody Movimientos movimientosUpdated) {
-        boolean updated = this.movimientosService.updateMovimiento(id, movimientosUpdated);
-        if (!updated) {
-            return new ResponseEntity<>("Movimiento not found", HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<String> updateMovimiento(@PathVariable Long id, @RequestBody MovimientosDTO movimientosUpdated) {
+        this.movimientosService.updateMovimiento(id, movimientosUpdated);
         return new ResponseEntity<>("Movimiento updated successfully", HttpStatus.OK);
     }
 }

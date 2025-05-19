@@ -3,6 +3,8 @@ package com.example.TcsMicroservicesAccount.microservice2.service.impl;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -74,17 +76,29 @@ public class CuentaServiceImpl implements CuentaService {
         if (client == null) {
             throw new NoClienteException("Client with id " + clientId + "not found");
         }
+       
+        List<Cuenta> cuentasUsuario = cuentaRepository.findAll().stream()
+        .filter(cuenta -> cuenta.getClientId().equals(clientId)).collect(Collectors.toList());
 
-        List<Cuenta> cuentasDeClientes = cuentaRepository.findAll().stream()
-                .filter(cuenta -> cuenta.getClientId().equals(clientId))
-                .filter(cuenta -> cuenta.getMovimientos().stream()
-                        .anyMatch(movimiento -> movimiento.getDate().after(dateTransactionStart) && movimiento.getDate().before(dateTransactionEnd)))
-                .toList();
+        // List<Cuenta> cuentasDeClientes = cuentasUsuario1.stream().filter(cuenta -> cuenta.getMovimientos().stream()
+        // .anyMatch(movimiento -> movimiento.getDate().after(dateTransactionStart) && movimiento.getDate().before(dateTransactionEnd)))
+// .toList();
 
-        if (cuentasDeClientes.isEmpty()) {
-            throw new NoAccountException("Client with id " + clientId + "has no accounts");
+        List<Cuenta> reporteUsuario = cuentasUsuario.stream()
+            .filter(cuenta -> cuenta.getMovimientos().stream()
+                    .anyMatch(movimiento -> movimiento.getDate().after(dateTransactionStart) && movimiento.getDate().before(dateTransactionEnd)))
+            .collect(Collectors.toList());
+
+        // List<Cuenta> cuentasDeClientes = cuentaRepository.findAll().stream()
+        //         .filter(cuenta -> cuenta.getClientId().equals(clientId))
+        //         .filter(cuenta -> cuenta.getMovimientos().stream()
+        //                 .anyMatch(movimiento -> movimiento.getDate().after(dateTransactionStart) && movimiento.getDate().before(dateTransactionEnd)))
+        //         .toList();
+
+        if (reporteUsuario.isEmpty()) {
+            throw new NoAccountException("Client with id " + clientId + " has no accounts");
         }
 
-        return new ReportDTO(client.getName(), cuentasDeClientes);
+        return new ReportDTO(client.getNombre(), reporteUsuario);
     } 
 }

@@ -1,11 +1,12 @@
 package com.example.TcsMicroservicesAccount.microservice2.service;
 
 import java.util.List;
-import com.example.TcsMicroservicesAccount.microservice2.data.Movimientos;
+
+import com.example.TcsMicroservicesAccount.microservice2.dto.MovimientosDTO;
 
 public interface MovimientosService {
-    List<Movimientos> getAllMovimientos();
-    void addMovimiento(Long accountNumber, Movimientos movimientos);
-    boolean deleteMovimiento(Long id);
-    boolean updateMovimiento(Long id, Movimientos movimientos_updated);
+    List<MovimientosDTO> getAllMovimientos();
+    void addMovimiento(Long accountNumber, MovimientosDTO movimientos);
+    void deleteMovimiento(Long id);
+    void updateMovimiento(Long id, MovimientosDTO movimientos_updated);
 }
